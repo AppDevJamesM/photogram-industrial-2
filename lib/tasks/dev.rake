@@ -46,7 +46,6 @@ task sample_data: :environment do
       end
     end
   end    
-  p "#{FollowRequest.count} follows have been created."  
 
   users.each do |user|
     rand(15).times do
@@ -70,17 +69,7 @@ task sample_data: :environment do
     end
   end
 
-  users.each do |main_user|
-    users.where.not(id: main_user.id).each do |other_user|
-    if rand < 0.5
-      other_user.own_photos.sample.likes.create(
-        fan_id: main_user
-      )
-    end  
-  end
-  end  
-  p "#{Like.count} likes have been created." 
-
+  
 ending = Time.now
   p "It took #{(ending - starting).to_i} seconds to create sample data."
   p "There are now #{User.count} users."
