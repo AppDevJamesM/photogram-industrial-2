@@ -32,8 +32,6 @@
   </div>
 </div>
 
-<%= current_user.liked_photos.count %>
-
-<% current_user.liked_photos.each do |zebra|%>
-  <%= render "photos/photo", giraffe: zebra %>
+<% @user.followers.each do |zebra|%>
+  <%= render "users/network", giraffe: zebra %>
 <% end %>
