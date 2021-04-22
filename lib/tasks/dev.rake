@@ -4,18 +4,22 @@ task sample_data: :environment do
   if Rails.env.development?
     FollowRequest.destroy_all
     Comment.destroy_all
-    Photo.destroy_all
     Like.destroy_all
+    Photo.destroy_all
     User.destroy_all
   end
 
   starting = Time.now
 
-  12.times do 
-    name = Faker::Name.first_name.downcase
-    u = User.create(
-      email: "#{name}@example.com",
-      username: name,
+  usernames = Array.new { Faker::Name.first_name }
+
+  usernames << "alice"
+  usernames << "bob"
+
+  usernames.each do |username| 
+    User.create(
+      email: "#{username}@example.com",
+      username: username.downcase,
       password: "password",
       private: [true, false].sample
     )
@@ -52,9 +56,9 @@ task sample_data: :environment do
       )
 
       user.followers.each do |follower|
-        #if rand < 0.5
-        #  photo.fans << follower
-        #end
+        if rand < 0.5
+         photo.fans << follower
+        end
 
         if rand < 0.5
           photo.comments.create(
@@ -66,16 +70,16 @@ task sample_data: :environment do
     end
   end
 
-  #users.each do |main_user|
-  # users.each do |other_user|
-  #   if rand < 0.5
-  #     other_user.own_photo.likes.create(
-  #       fan_id: main_user
-  #     )
-  #   end  
-  # end
-  #end  
-  #p "#{Like.count} likes have been created." 
+  users.each do |main_user|
+    users.where.not(id: main_user.id).each do |other_user|
+    if rand < 0.5
+      other_user.own_photos.sample.likes.create(
+        fan_id: main_user
+      )
+    end  
+  end
+  end  
+  p "#{Like.count} likes have been created." 
 
 ending = Time.now
   p "It took #{(ending - starting).to_i} seconds to create sample data."
