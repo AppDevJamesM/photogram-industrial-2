@@ -11,7 +11,7 @@ task sample_data: :environment do
 
   starting = Time.now
 
-  usernames = Array.new { Faker::Name.first_name }
+ usernames = Array.new { Faker::Name.first_name }
 
   usernames << "alice"
   usernames << "bob"
@@ -25,6 +25,16 @@ task sample_data: :environment do
     )
 
     # p u.errors_full_messages
+  end
+
+  12.times do
+    name = Faker::Name.first_name
+    User.create(
+      email: "#{name}@example.com",
+      password: "password",
+      username: name.downcase,
+      private: [true, false].sample,
+    )
   end
 
   users = User.all
