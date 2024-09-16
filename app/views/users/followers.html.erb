@@ -20,9 +20,9 @@
       </li>
       
       <li class="nav-item">
-        <%= link_to "Followers", followers_path(@user.username), class: "nav-link" %>
+          <%= link_to "Followers", followers_path(@user.username), class: "nav-link" %>
       </li>
-      
+
       <li class="nav-item">
         <%= link_to "Following", leaders_path(@user.username), class: "nav-link" %>
       </li>
@@ -32,8 +32,6 @@
   </div>
 </div>
 
-<%= @user.own_photos.count %>
-
-<% @user.own_photos.each do |zebra|%>
-  <%= render "photos/photo", giraffe: zebra %>
+<% @user.followers.each do |zebra|%>
+  <%= render "users/network", giraffe: zebra %>
 <% end %>
